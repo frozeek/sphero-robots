@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9" lang="en"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <!-- Uncomment to make IE8 render like IE7 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Sphero Controller</title>
+    <style type="text/css" media="screen">
+        #wrapper {
+          position: relative;
+          width: 640px;
+          height: 480px;
+        }
+        #editor { 
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+  </head>
+
+  <body>
+    <p>Commands:</p>
+    <ul>
+      <li>
+        <p>move direction [, speed]</p>
+        <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
+        <p>speed = 0-255</p>
+      </li>
+    </ul>
+    <div id="wrapper">
+      <div id="editor">
+      </div>
+    </div>
+
+    <p>
+      <button name='submit'/>Ejecutar</button>
+    </p>
+
+    <script type='text/javascript' src='/javascript/jquery.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/javascript/ace.js' charset='utf-8'></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/github");
+        editor.getSession().setMode("ace/mode/ruby");
+        editor.getSession().setTabSize(2);
+        editor.getSession().setUseSoftTabs(true);
+        editor.focus();
+    </script>
+    <script>
+      $('button').click(function(){
+        var code = editor.getSession().getValue();
+        $.post('/run', { code: code }, function(data){
+          editor.focus();
+        });
+      });
+    </script>
+  </body>
+</html>
+
