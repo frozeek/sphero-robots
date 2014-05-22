@@ -11,6 +11,12 @@ class SpheroRobot
   LEFT = 270
   RIGHT = 90
 
+  ON = 1
+  OFF = 0
+
+  PERMANENT = true
+  TEMPORARY = false
+
   attr_accessor :robot, :time
 
   def initialize
@@ -27,7 +33,6 @@ class SpheroRobot
 
   def boot_up
     puts 'Booting up...'
-    robot.back_led_output = 0xFF
     robot.color 'white'
     robot.roll 0, 0
   end
@@ -42,8 +47,12 @@ class SpheroRobot
     robot.keep_going @time
   end
 
-  def set_time(value)
+  def time(value)
     @time = value
+  end
+
+  def color(value, persistant=TEMPORARY)
+    robot.color value, persistant
   end
 
   def spin
@@ -52,8 +61,29 @@ class SpheroRobot
       h = 0 if h == 360
       # Set the heading to h degrees
       robot.heading = h
-      keep_going 1
+      robot.keep_going 1
     end
+  end
+
+  def rotation(rate)
+    robot.rotation_rate = rate
+  end
+
+  def calibration(status)
+    if status == ON
+      robot.back_led_output = 0xFF
+      robot.stabilization = false
+    else
+      robot.heading = FORWARD
+      robot.back_led_output = 0x00
+      robot.stabilization = true
+    end
+  end
+
+  def calibrate(seconds=10)
+    calibration ON
+    sleep seconds
+    calibration OFF
   end
 
   def listen_to_commands

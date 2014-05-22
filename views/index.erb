@@ -31,22 +31,43 @@
   </head>
 
   <body>
-    <p>Commands:</p>
-    <ul>
-      <li>
-        <p>move direction [, speed]</p>
-        <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
-        <p>speed = 0-255</p>
-      </li>
-    </ul>
     <div id="wrapper">
       <div id="editor">
       </div>
     </div>
 
     <p>
-      <button name='submit'/>Ejecutar</button>
+      <button name='submit' id='submit'/>Ejecutar</button>
+      <button name='calibrate' id='calibrate'/>Calibrar</button>
     </p>
+
+    <p>Commands:</p>
+    <ul>
+      <li>
+        <p>move &ltdirection&gt [, &ltspeed&gt]</p>
+        <p>Moves the sphero in the specified direction</p>
+        <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
+        <p>speed = 0-255 (default 30)</p>
+      </li>
+      <li>
+        <p>calibrate [&ltseconds&gt]</p>
+        <p>Let's you calibrate the sphero. That is, where it points to.</p>
+        <p>seconds = time in seconds of the calibration period. Default 10 seconds.</p>
+      </li>
+      <li>
+        <p>time &ltseconds&gt</p>
+        <p>Sets time gap between direction changes. Default: 3 seconds</p>
+      </li>
+      <li>
+        <p>color &ltcolor&gt</p>
+        <p>Sets the color of the sphero</p>
+      </li>
+      <li>
+        <p>rotation &ltrate&gt</p>
+        <p>Sets the rotation rate of the sphero. This is how fast it changes directions.</p>
+        <p>rate = 0-255</p>
+      </li>
+    </ul>
 
     <script type='text/javascript' src='/javascript/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/javascript/ace.js' charset='utf-8'></script>
@@ -59,11 +80,14 @@
         editor.focus();
     </script>
     <script>
-      $('button').click(function(){
+      $('button#submit').click(function(){
         var code = editor.getSession().getValue();
         $.post('/run', { code: code }, function(data){
           editor.focus();
         });
+      });
+      $('button#calibrate').click(function(){
+        $.post('/run', { code: 'calibrate' });
       });
     </script>
   </body>

@@ -20,7 +20,6 @@ module SpheroController
 
     error do |e|
       status 422
-      # json({ status: 'error', message: e.message })
     end
 
     get '/' do
