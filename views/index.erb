@@ -26,9 +26,9 @@
         <button name='calibrate' id='calibrate'/>Calibrar</button>
       </div>
       <div id='log'>
-        <p>Moving.....</p>
       </div>
     </section>
+
     <section id='right'>
       <h2>Commands</h2>
       <ul>
@@ -67,6 +67,7 @@
 
     <script type='text/javascript' src='/javascript/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/javascript/ace.js' charset='utf-8'></script>
+
     <script>
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/github");
@@ -75,6 +76,7 @@
         editor.getSession().setUseSoftTabs(true);
         editor.focus();
     </script>
+
     <script>
       $('button#submit').click(function(){
         var code = editor.getSession().getValue();
@@ -85,6 +87,14 @@
       $('button#calibrate').click(function(){
         $.post('/run', { code: 'calibrate' });
       });
+    </script>
+
+    <script>
+      var source = new EventSource('/stream');
+      source.onmessage = function(e) {
+        var data = $.parseJSON(e.data);
+        $('#log').append("<p class='" + data.severity + "'>" + data.message + "</p>")
+      };
     </script>
   </body>
 </html>

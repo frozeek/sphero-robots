@@ -1,35 +1,33 @@
 # Require base
-require 'sinatra/base'
-require 'rack/standards'
-require 'lib/json_body_params'
+require 'sinatra'
 require 'redis'
 
-module SpheroController
-  class App < Sinatra::Application
-    configure do
-      register Sinatra::JsonBodyParams
-    end
+require_relative 'lib/json_body_params'
 
-    configure do
-      disable :method_override
-      set :show_exceptions, false
-    end
+connections = []
 
-    use Rack::Deflater
-    use Rack::Standards
+get '/' do
+  erb :index
+end
 
-    error do |e|
-      status 422
-    end
+post '/run' do
+  redis = Redis.connect
+  redis.publish('message', params[:code])
+  status 200
+end
 
-    get '/' do
-      erb :index
-    end
+get '/stream', provides: 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
 
-    post '/run' do
-      redis = Redis.connect
-      redis.publish('message', params[:code])
-      redirect to('/')
+Thread.new do
+  redis = Redis.connect
+  redis.psubscribe('logging', 'logging.*') do |on|
+    on.pmessage do |match, channel, message|
+      connections.each { |out| out << "data: #{message}\n\n" }
     end
   end
 end

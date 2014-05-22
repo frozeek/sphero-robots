@@ -3,6 +3,7 @@ require 'sphero'
 require 'redis'
 require 'dotenv'
 require 'logger'
+require 'json'
 
 Dotenv.load
 
@@ -115,17 +116,17 @@ class RobotLogger
 
   def info(message)
     @std_logger.info(message)
-    @redis.publish('logging', { message: message, severity: :info })
+    @redis.publish('logging', { message: message, severity: :info }.to_json)
   end
 
   def warn(message)
     @std_logger.warn(message)
-    @redis.publish('logging', { message: message, severity: :warn })
+    @redis.publish('logging', { message: message, severity: :warn }.to_json)
   end
 
   def error(message)
     @std_logger.error(message)
-    @redis.publish('logging', { message: message, severity: :error })
+    @redis.publish('logging', { message: message, severity: :error }.to_json)
   end
 end
 

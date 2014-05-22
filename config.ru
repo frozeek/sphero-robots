@@ -1,3 +1,3 @@
 require './app'
 
-run SpheroController::App
+run Sinatra::Application
