@@ -36,6 +36,8 @@
           <p class='command'>move &ltdirection&gt [, &ltspeed&gt]</p>
           <p class='description'>Moves the sphero in the specified direction</p>
           <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
+          <small>You can use degrees instead of direction constants</small>
+          <small>0 - FORWARD, 180-BACKWARD, 90-RIGHT, 270-LEFT (negative degrees work too ;-))</small>
           <p>speed = 0-255 (default 30)</p>
         </li>
         <li>
@@ -44,15 +46,19 @@
           <p>seconds = time in seconds of the calibration period. Default 10 seconds.</p>
         </li>
         <li>
-          <p class='command'>time &ltseconds&gt</p>
+          <p class='command'>set_default_time &ltseconds&gt</p>
           <p class='description'>Sets time gap between direction changes. Default: 3 seconds</p>
         </li>
         <li>
-          <p class='command'>color &ltcolor&gt</p>
+          <p class='command'>set_default_speed &ltspeed&gt</p>
+          <p class='description'>Sets the rolling speed. Default: 30</p>
+        </li>
+        <li>
+          <p class='command'>set_color &ltcolor&gt</p>
           <p class='description'>Sets the color of the sphero</p>
         </li>
         <li>
-          <p class='command'>rotation &ltrate&gt</p>
+          <p class='command'>set_rotation_rate &ltrate&gt</p>
           <p class='description'>Sets the rotation rate of the sphero. This is how fast it changes directions.</p>
           <p>rate = 0-255</p>
         </li>
