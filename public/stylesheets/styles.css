@@ -1,0 +1,83 @@
+#editor {
+  background: none repeat scroll 0 0 #F8F5ED;
+  display: block;
+  font-family: Monaco, sans-serif;
+  height: 50%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#buttons {
+  background: none repeat scroll 0 0 #FFFFFF;
+  height: 8%;
+  padding: 1rem;
+}
+
+button {
+  background-color: #C1D72E;
+  border: medium none;
+  color: #FFFFFF;
+  cursor: pointer;
+  float: right;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-left: 1rem;
+  padding: 1rem;
+}
+
+#log {
+  background: none repeat scroll 0 0 #434750;
+  color: #C1D72E;
+  font-family: Monaco, sans-serif;
+  height: 42%;
+  padding: 1rem;
+}
+
+#left {
+  position: fixed;
+  top: 0;
+  right: 50%;
+  bottom: 0;
+  left: 0;
+}
+
+#right {
+  font-family: sans-serif;
+  box-shadow: -7px 0 rgba(0, 0, 0, 0.2);
+  padding; 1rem;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+}
+
+#right h2 {
+  background-color: #F26234;
+  color: #FFFFFF;
+  line-height: 3rem;
+  padding: 0 10px;
+}
+
+#right ul {
+  padding-left: 15px;
+}
+
+#right ul li {
+  list-style: none;
+  margin-top: 40px;
+}
+
+#right p {
+  color: #69BDBE;
+}
+
+#right p.description {
+  color: #434750;
+}
+
+#right p.command {
+  color: #434750;
+  font-weight: bold;
+}

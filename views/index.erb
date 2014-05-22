@@ -14,60 +14,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sphero Controller</title>
-    <style type="text/css" media="screen">
-        #wrapper {
-          position: relative;
-          width: 640px;
-          height: 480px;
-        }
-        #editor { 
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
-    </style>
+    <link rel='stylesheet' type='text/css' href='stylesheets/styles.css'>
   </head>
 
   <body>
-    <div id="wrapper">
+    <section id="left">
       <div id="editor">
       </div>
-    </div>
-
-    <p>
-      <button name='submit' id='submit'/>Ejecutar</button>
-      <button name='calibrate' id='calibrate'/>Calibrar</button>
-    </p>
-
-    <p>Commands:</p>
-    <ul>
-      <li>
-        <p>move &ltdirection&gt [, &ltspeed&gt]</p>
-        <p>Moves the sphero in the specified direction</p>
-        <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
-        <p>speed = 0-255 (default 30)</p>
-      </li>
-      <li>
-        <p>calibrate [&ltseconds&gt]</p>
-        <p>Let's you calibrate the sphero. That is, where it points to.</p>
-        <p>seconds = time in seconds of the calibration period. Default 10 seconds.</p>
-      </li>
-      <li>
-        <p>time &ltseconds&gt</p>
-        <p>Sets time gap between direction changes. Default: 3 seconds</p>
-      </li>
-      <li>
-        <p>color &ltcolor&gt</p>
-        <p>Sets the color of the sphero</p>
-      </li>
-      <li>
-        <p>rotation &ltrate&gt</p>
-        <p>Sets the rotation rate of the sphero. This is how fast it changes directions.</p>
-        <p>rate = 0-255</p>
-      </li>
-    </ul>
+      <div id='buttons' class='group'>
+        <button name='submit' id='submit'/>Ejecutar</button>
+        <button name='calibrate' id='calibrate'/>Calibrar</button>
+      </div>
+      <div id='log'>
+        <p>Moving.....</p>
+      </div>
+    </section>
+    <section id='right'>
+      <h2>Commands</h2>
+      <ul>
+        <li>
+          <p class='command'>move &ltdirection&gt [, &ltspeed&gt]</p>
+          <p class='description'>Moves the sphero in the specified direction</p>
+          <p>direction = FORWARD | BACKWARD | LEFT | RIGHT</p>
+          <p>speed = 0-255 (default 30)</p>
+        </li>
+        <li>
+          <p class='command'>calibrate [&ltseconds&gt]</p>
+          <p class='description'>Let's you calibrate the sphero. That is, where it points to.</p>
+          <p>seconds = time in seconds of the calibration period. Default 10 seconds.</p>
+        </li>
+        <li>
+          <p class='command'>time &ltseconds&gt</p>
+          <p class='description'>Sets time gap between direction changes. Default: 3 seconds</p>
+        </li>
+        <li>
+          <p class='command'>color &ltcolor&gt</p>
+          <p class='description'>Sets the color of the sphero</p>
+        </li>
+        <li>
+          <p class='command'>rotation &ltrate&gt</p>
+          <p class='description'>Sets the rotation rate of the sphero. This is how fast it changes directions.</p>
+          <p>rate = 0-255</p>
+        </li>
+      </ul>
+    </section>
 
     <script type='text/javascript' src='/javascript/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/javascript/ace.js' charset='utf-8'></script>
