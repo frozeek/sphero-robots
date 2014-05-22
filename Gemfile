@@ -10,6 +10,7 @@ gem 'sphero'
 gem 'hybridgroup-serialport'
 gem 'redis'
 gem 'dotenv'
+gem 'unicorn'
 
 group :development do
   gem 'debugger', require: 'ruby-debug'
