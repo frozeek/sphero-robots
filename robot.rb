@@ -2,6 +2,7 @@ require 'artoo'
 require 'sphero'
 require 'redis'
 require 'dotenv'
+require 'logger'
 
 Dotenv.load
 
@@ -17,14 +18,15 @@ class SpheroRobot
   PERMANENT = true
   TEMPORARY = false
 
-  attr_accessor :robot, :time
+  attr_accessor :robot, :time, :logger
 
-  def initialize
-    puts "Initializing sphero robot listener for #{ENV['DEVICE_PATH']}..."
+  def initialize(logger)
+    @logger = logger
+    logger.info "Initializing sphero robot listener for #{ENV['DEVICE_PATH']}..."
     retries = 0
     @robot = Sphero.new ENV['DEVICE_PATH']
     @time = 3
-    puts 'Robot initialized'
+    logger.info 'Robot initialized'
   rescue Errno::EBUSY
     sleep 5
     retries += 1
@@ -32,8 +34,8 @@ class SpheroRobot
   end
 
   def boot_up
-    puts 'Booting up...'
-    robot.color 'white'
+    logger.info 'Booting up...'
+    robot.color 'red'
     robot.roll 0, 0
   end
 
@@ -42,7 +44,7 @@ class SpheroRobot
   end
 
   def move(direction, speed=30)
-    puts "Moving at #{speed} towards #{direction}"
+    logger.info "Moving at #{speed} towards #{direction}"
     robot.roll speed, direction
     robot.keep_going @time
   end
@@ -88,17 +90,24 @@ class SpheroRobot
 
   def listen_to_commands
     redis = Redis.connect
-    puts 'Redis queue initialized'
-    puts 'Waiting for commands'
+    logger.info 'Redis queue initialized'
+    logger.info 'Waiting for commands'
     redis.psubscribe('message', 'message.*') do |on|
       on.pmessage do |match, channel, message|
-        eval message, proc.binding
+        begin
+          raise "System calls are not allowed" if message =~ /exec|system|`|\%x/
+          eval message, proc.binding
+        rescue => e
+          logger.error e
+        end
       end
     end
   end
 end
 
-robot = SpheroRobot.new
+logger = Logger.new(STDOUT, 1)
+
+robot = SpheroRobot.new(logger)
 robot.boot_up
 robot.listen_to_commands
 
