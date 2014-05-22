@@ -18,14 +18,18 @@ class SpheroRobot
   PERMANENT = true
   TEMPORARY = false
 
-  attr_accessor :robot, :time, :logger
+  attr_accessor :robot, :default_time, :logger, :default_speed
 
-  def initialize(logger)
+  def initialize(logger=RobotLogger.new)
     @logger = logger
     logger.info "Initializing sphero robot listener for #{ENV['DEVICE_PATH']}..."
     retries = 0
+
     @robot = Sphero.new ENV['DEVICE_PATH']
-    @time = 3
+
+    @default_time = 3
+    @default_speed = 30
+
     logger.info 'Robot initialized'
   rescue Errno::EBUSY
     sleep 5
@@ -43,31 +47,25 @@ class SpheroRobot
     Proc.new {}
   end
 
-  def move(direction, speed=30)
+  def move(direction, speed=default_speed)
     logger.info "Moving at #{speed} towards #{direction}"
     robot.roll speed, direction
-    robot.keep_going @time
+    robot.keep_going default_time
   end
 
-  def time(value)
-    @time = value
+  def set_default_time(value)
+    @default_time = value
   end
 
-  def color(value, persistant=TEMPORARY)
+  def set_default_speed(value)
+    @default_speed = value
+  end
+
+  def set_color(value, persistant=TEMPORARY)
     robot.color value, persistant
   end
 
-  def spin
-    # Turn 360 degrees, 30 degrees at a time
-    0.step(360, 30) do |h|
-      h = 0 if h == 360
-      # Set the heading to h degrees
-      robot.heading = h
-      robot.keep_going 1
-    end
-  end
-
-  def rotation(rate)
+  def set_rotation_rate(rate)
     robot.rotation_rate = rate
   end
 
@@ -83,9 +81,11 @@ class SpheroRobot
   end
 
   def calibrate(seconds=10)
+    logger.info 'Starting calibration...'
     calibration ON
     sleep seconds
     calibration OFF
+    logger.info 'Calibration finished'
   end
 
   def listen_to_commands
@@ -105,9 +105,31 @@ class SpheroRobot
   end
 end
 
-logger = Logger.new(STDOUT, 1)
+class RobotLogger
+  attr_accessor :redis, :stdout_logger, :redis_logger
 
-robot = SpheroRobot.new(logger)
+  def initialize
+    @redis = Redis.connect
+    @std_logger = Logger.new(STDOUT, 1)
+  end
+
+  def info(message)
+    @std_logger.info(message)
+    @redis.publish('logging', { message: message, severity: :info })
+  end
+
+  def warn(message)
+    @std_logger.warn(message)
+    @redis.publish('logging', { message: message, severity: :warn })
+  end
+
+  def error(message)
+    @std_logger.error(message)
+    @redis.publish('logging', { message: message, severity: :error })
+  end
+end
+
+robot = SpheroRobot.new
 robot.boot_up
 robot.listen_to_commands
 
