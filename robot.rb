@@ -23,19 +23,28 @@ class SpheroRobot
 
   def initialize(logger=RobotLogger.new)
     @logger = logger
-    logger.info "Initializing sphero robot listener for #{ENV['DEVICE_PATH']}..."
-    retries = 0
-
-    @robot = Sphero.new ENV['DEVICE_PATH']
-
+    logger.info "Starting initialization..."
     @default_time = 3
     @default_speed = 30
+    initialize_sphero_robot
+    logger.info "Finishing initialization..."
+  end
 
+  def initialize_sphero_robot
+    logger.info "Initializing sphero robot listener for #{ENV['DEVICE_PATH']}..."
+    retries = 0
+    @robot = Sphero.new ENV['DEVICE_PATH']
     logger.info 'Robot initialized'
   rescue Errno::EBUSY
     sleep 5
     retries += 1
     retry if retries <= 5
+  end
+
+  def reset
+    logger.info 'Reseting robot...'
+    initialize_sphero_robot
+    logger.info 'Robot ready'
   end
 
   def boot_up

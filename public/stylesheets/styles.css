@@ -29,6 +29,11 @@ button#stop {
   background-color: #F26234;
 }
 
+button#reset {
+  position: fixed;
+  left: 0;
+}
+
 #log {
   background: none repeat scroll 0 0 #434750;
   color: #C1D72E;

@@ -22,9 +22,10 @@
       <div id="editor">
       </div>
       <div id='buttons' class='group'>
-        <button name='submit' id='submit'/>Execute</button>
+        <button name='submit' id='submit'/>Run</button>
         <button name='calibrate' id='calibrate'/>Calibrate</button>
         <button name='stop' id='stop'/>Stop</button>
+        <button name='reset' id='reset'/>Reset</button>
       </div>
       <div id='log'>
       </div>
@@ -90,6 +91,9 @@
       });
       $('button#stop').click(function(){
         $.post('/run', { code: 'stop' });
+      });
+      $('button#reset').click(function(){
+        $.post('/run', { code: 'reset' });
       });
     </script>
 
