@@ -25,12 +25,18 @@ button {
   padding: 1rem;
 }
 
+button#stop {
+  background-color: #F26234;
+}
+
 #log {
   background: none repeat scroll 0 0 #434750;
   color: #C1D72E;
   font-family: Monaco, sans-serif;
   height: 42%;
   padding: 1rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 #left {

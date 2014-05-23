@@ -40,7 +40,8 @@ class SpheroRobot
 
   def boot_up
     logger.info 'Booting up...'
-    robot.color 'red'
+    colors = %w(red green blue yellow black violet orange white)
+    colors.each {|c| robot.color c }
     robot.roll 0, 0
   end
 
@@ -49,25 +50,34 @@ class SpheroRobot
   end
 
   def move(direction, speed=default_speed)
-    logger.info "Moving at #{speed} towards #{direction}"
+    logger.info "Moving to #{direction} degrees at #{speed}"
     robot.roll speed, direction
     robot.keep_going default_time
   end
 
   def set_default_time(value)
+    logger.info "Setting default time to #{value}"
     @default_time = value
   end
 
   def set_default_speed(value)
+    logger.info "Setting default speed to #{value}"
     @default_speed = value
   end
 
   def set_color(value, persistant=TEMPORARY)
+    logger.info "Setting color to #{value}"
     robot.color value, persistant
   end
 
   def set_rotation_rate(rate)
+    logger.info "Setting rotation rate to #{rate}"
     robot.rotation_rate = rate
+  end
+
+  def stop
+    logger.info "Stopping sphero..."
+    robot.stop
   end
 
   def calibration(status)
